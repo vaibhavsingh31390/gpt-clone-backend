@@ -1,5 +1,6 @@
 // Define the User model
 const { DataTypes } = require("sequelize");
+const bcrypt = require("bcrypt");
 const sequelize = require("../dbConfig");
 const User = sequelize.define(
   "User",
@@ -12,10 +13,15 @@ const User = sequelize.define(
         isEmail: true,
       },
     },
-    username: {
+    age: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      unique: false,
+    },
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: false,
     },
     password: {
       type: DataTypes.STRING,
@@ -28,15 +34,29 @@ const User = sequelize.define(
   },
   {
     timestamps: true,
+    hooks: {
+      beforeCreate: async (user) => {
+        if (user.changed("password")) {
+          const hashedPassword = await bcrypt.hash(user.password, 10);
+          user.password = hashedPassword;
+        }
+      },
+      beforeUpdate: async (user) => {
+        if (user.changed("password")) {
+          const hashedPassword = await bcrypt.hash(user.password, 10);
+          user.password = hashedPassword;
+        }
+      },
+    },
   }
 );
 
-User.sync({ force: false })
-  .then(() => {
-    console.log("User table created");
-  })
-  .catch((err) => {
-    console.error("Error creating User table:", err);
-  });
+// User.sync({ force: false })
+//   .then(() => {
+//     console.log("User table created");
+//   })
+//   .catch((err) => {
+//     console.error("Error creating User table:", err);
+//   });
 
 module.exports = User;
