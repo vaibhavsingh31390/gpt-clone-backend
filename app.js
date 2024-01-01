@@ -9,19 +9,23 @@ require("dotenv").config({ path: "./config.env" });
 if (process.env.APP_ENV === "DEV") {
   app.use(morgan("dev"));
 }
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
+
 const authRoutes = require("./routes/authRoutes");
-
 app.use("/api/v1/users", authRoutes);
-
 app.get("/", (req, res, next) => {
   return res.status(200).json({
     status: "Succeess",
     message: "Applicatin Running...",
   });
 });
-
 app.all("*", (req, res, next) => {
   const err = new AppError(`Can't find ${req.originalUrl}`);
   err.statusCode = 404;
