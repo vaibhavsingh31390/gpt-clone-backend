@@ -28,12 +28,12 @@ const Chat = sequelize.define(
   }
 );
 
-Chat.sync({ force: false })
-  .then(() => {
-    console.log("Chat table created");
-  })
-  .catch((err) => {
-    console.error("Error creating Chat table:", err);
-  });
+// Chat.sync({ force: false })
+//   .then(() => {
+//     console.log("Chat table created");
+//   })
+//   .catch((err) => {
+//     console.error("Error creating Chat table:", err);
+//   });
 
 module.exports = Chat;

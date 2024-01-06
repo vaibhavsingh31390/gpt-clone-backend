@@ -19,7 +19,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 const authRoutes = require("./routes/authRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 app.use("/api/v1/users", authRoutes);
+app.use("/api/v1/chats", chatRoutes);
 app.get("/", (req, res, next) => {
   return res.status(200).json({
     status: "Succeess",

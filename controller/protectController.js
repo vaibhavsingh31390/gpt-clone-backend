@@ -1,10 +1,11 @@
 const User = require("../models/userModel");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/CatchAsync");
-const { verifyJWT } = require("../utils/utility");
+const { verifyJWT, checkUserJwtHeader } = require("../utils/utility");
 
 module.exports.verifyUser = catchAsync(async (req, res, next) => {
-  const checkUserJwt = req.cookies.jwt;
+  const checkUserJwt = checkUserJwtHeader(req);
+  console.log(checkUserJwt);
   if (!checkUserJwt) {
     next(new AppError(403, "Inavlid Token."));
   }
@@ -19,5 +20,7 @@ module.exports.verifyUser = catchAsync(async (req, res, next) => {
   if (!userExistCheck) {
     next(new AppError(403, "Invalid user."));
   }
+  req.locals = {};
+  req.locals.users = userExistCheck;
   next();
 });
