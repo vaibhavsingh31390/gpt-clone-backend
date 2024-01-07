@@ -49,9 +49,10 @@ module.exports.signInUser = catchAsync(async (req, res, next) => {
     return next(new AppError(403, "Inavlid credentials."));
   }
   const userToken = createJWT(user);
+  const expiry = 86400 * 1000 * process.env.TOKEN_VALIDITY_DAYS;
   res.cookie("jwt", userToken, {
     httpOnly: true,
-    maxAge: 86400 * process.env.TOKEN_VALIDITY_DAYS,
+    maxAge: new Date(Date.now() + expiry),
     sameSite: "None",
     secure: true,
   });
@@ -59,7 +60,7 @@ module.exports.signInUser = catchAsync(async (req, res, next) => {
     status: 200,
     message: "Success",
     payload: {
-      users: { name: user.name, email: user.email },
+      users: { id: user.id, name: user.name, email: user.email },
       token: userToken,
     },
   });
