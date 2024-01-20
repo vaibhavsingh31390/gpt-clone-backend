@@ -10,7 +10,7 @@ if (process.env.APP_ENV === "DEV") {
   app.use(morgan("dev"));
 }
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: "https://chatgpt-cloned.netlify.app/",
   credentials: true,
   optionsSuccessStatus: 200,
 };
