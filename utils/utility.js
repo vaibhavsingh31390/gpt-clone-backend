@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const catchAsync = require("./CatchAsync");
 const createJWT = (user) => {
   const expirySeconds = process.env.TOKEN_EXPIRY;

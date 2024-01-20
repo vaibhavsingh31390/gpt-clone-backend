@@ -1,6 +1,6 @@
 // Define the User model
 const { DataTypes } = require("sequelize");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const sequelize = require("../dbConfig");
 const User = sequelize.define(
   "User",
