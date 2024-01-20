@@ -4,10 +4,22 @@ const catchAsync = require("../utils/CatchAsync");
 const { createJWT, verifyPassword } = require("../utils/utility");
 
 module.exports.createUser = catchAsync(async (req, res, next) => {
-  const { name, email, age, password, cpassword } = req.body;
-  if (!name || !email || !age || !password || !cpassword) {
-    return next(new AppError(400, "Invalid Request Body."));
+  const missingField = ["name", "email", "age", "password", "cpassword"].find(
+    (field) => !req.body[field]
+  );
+
+  if (missingField) {
+    return next(
+      new AppError(
+        400,
+        `${
+          missingField.charAt(0).toUpperCase() + missingField.slice(1)
+        } is required.`
+      )
+    );
   }
+  const { password, cpassword } = req.body;
+
   if (password !== cpassword) {
     return next(new AppError(400, "Password & Confirm Password Do Not Match."));
   }

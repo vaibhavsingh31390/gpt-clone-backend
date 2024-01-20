@@ -19,7 +19,7 @@ const Chat = sequelize.define(
       allowNull: false,
     },
     response: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
   },
