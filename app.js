@@ -11,7 +11,6 @@ if (process.env.APP_ENV === "DEV") {
 }
 
 const allowedOrigins = ["https://chatgpt-cloned.netlify.app"];
-// const allowedOrigins = ["http://localhost:5173"];
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
