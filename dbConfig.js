@@ -1,10 +1,18 @@
 const { Sequelize } = require("sequelize");
 const mariadb = require("mariadb");
-const name = process.env.DB_NAME;
-const username = process.env.DB_USERNAME;
-const userpass = process.env.DB_PASS;
-const host = process.env.DB_HOST;
-// const userpass = null;
+
+let name = "gptclone";
+let username = "root";
+let userpass = null;
+let host = "localhost";
+
+if (process.env.APP_ENV !== "DEV") {
+  name = process.env.DB_NAME;
+  username = process.env.DB_USERNAME;
+  userpass = process.env.DB_PASS;
+  host = process.env.DB_HOST;
+}
+
 const sequelize = new Sequelize(name, username, userpass, {
   host: host,
   dialect: "mariadb",
