@@ -6,15 +6,14 @@ const errorHandler = require("./controller/errorController");
 const AppError = require("./utils/AppError");
 const cookieParser = require("cookie-parser");
 require("dotenv").config({ path: "./config.env" });
-let allowedOrigins = new Array();
+let allowedOrigins = null;
 if (process.env.APP_ENV === "DEV") {
   app.use(morgan("dev"));
   console.log("prooo");
   allowedOrigins = ["http://localhost:5173"];
 } else {
-  allowedOrigins = ["https://chatgpt-cloned.netlify.app"];
 }
-
+allowedOrigins = ["https://chatgpt-cloned.netlify.app"];
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
