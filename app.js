@@ -9,6 +9,7 @@ require("dotenv").config({ path: "./config.env" });
 let allowedOrigins = new Array();
 if (process.env.APP_ENV === "DEV") {
   app.use(morgan("dev"));
+  console.log("prooo");
   allowedOrigins = ["http://localhost:5173"];
 } else {
   allowedOrigins = ["https://chatgpt-cloned.netlify.app"];
