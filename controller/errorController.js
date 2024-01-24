@@ -9,6 +9,14 @@ const devErrorHandler = (err, req, res, next) => {
       Error: err,
       ErrorStack: err.stack,
     });
+  } else {
+    return res.status(err.statusCode).json({
+      Code: err.statusCode,
+      Status: err.status,
+      Message: err.message,
+      Error: err,
+      ErrorStack: err.stack,
+    });
   }
 };
 
@@ -20,8 +28,13 @@ const prodErrorHandler = (err, req, res, next) => {
       Status: err.status,
       Message: "Something went wrong.",
     });
+  } else {
+    return res.status(err.statusCode).json({
+      Code: err.statusCode,
+      Status: err.status,
+      Message: "Something went wrong.",
+    });
   }
-  console.error("Invalid request object:", req);
 };
 
 module.exports = (error, req, res, next) => {
