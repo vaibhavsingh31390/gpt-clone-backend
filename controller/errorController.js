@@ -14,13 +14,14 @@ const devErrorHandler = (err, req, res, next) => {
 
 const prodErrorHandler = (err, req, res, next) => {
   console.log(err);
-  if (req.originalUrl.startsWith("/api")) {
+  if (req && req.originalUrl && req.originalUrl.startsWith("/api")) {
     return res.status(err.statusCode).json({
       Code: err.statusCode,
       Status: err.status,
       Message: "Something went wrong.",
     });
   }
+  console.error("Invalid request object:", req);
 };
 
 module.exports = (error, req, res, next) => {

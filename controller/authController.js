@@ -1,7 +1,11 @@
 const User = require("../models/userModel");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/CatchAsync");
-const { createJWT, verifyPassword } = require("../utils/utility");
+const {
+  createJWT,
+  verifyPassword,
+  checkUserJwtHeader,
+} = require("../utils/utility");
 
 module.exports.createUser = catchAsync(async (req, res, next) => {
   const missingField = ["name", "email", "age", "password", "cpassword"].find(
@@ -78,4 +82,15 @@ module.exports.signInUser = catchAsync(async (req, res, next) => {
   });
 });
 
-module.exports.signOutUser = (req, res, next) => {};
+module.exports.signOutUser = catchAsync(async (req, res, next) => {
+  const jwtCookie = checkUserJwtHeader(req);
+  if (!jwtCookie) {
+    return next(new AppError(403, "Inavlid requet."));
+  }
+  res.cookie("jwt", "", { expires: new Date(0) });
+  res.status(200).json({
+    status: 200,
+    message: "Logged out Successfully",
+    jwtCookie,
+  });
+});

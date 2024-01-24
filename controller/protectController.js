@@ -5,7 +5,6 @@ const { verifyJWT, checkUserJwtHeader } = require("../utils/utility");
 
 module.exports.verifyUser = catchAsync(async (req, res, next) => {
   const checkUserJwt = checkUserJwtHeader(req);
-  console.log(checkUserJwt);
   if (!checkUserJwt) {
     next(new AppError(403, "Inavlid Token."));
   }
