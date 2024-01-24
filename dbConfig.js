@@ -11,6 +11,11 @@ if (process.env.APP_ENV !== "DEV") {
   username = process.env.DB_USERNAME;
   userpass = process.env.DB_PASS;
   host = process.env.DB_HOST;
+} else {
+  name = process.env.DB_NAME;
+  username = process.env.DB_USERNAME;
+  userpass = process.env.DB_PASS;
+  host = process.env.DB_HOST;
 }
 
 const sequelize = new Sequelize(name, username, userpass, {
