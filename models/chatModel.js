@@ -5,8 +5,8 @@ const Chat = sequelize.define(
   "Chat",
   {
     conversationId: {
-      type: DataTypes.UUID,
-      defaultValue: sequelize.UUIDV4,
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
       allowNull: false,
       primaryKey: true,
     },

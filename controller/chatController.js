@@ -6,7 +6,8 @@ const openAi = require("openai");
 const ai = new openAi.OpenAI();
 module.exports.sendChatReq = catchAsync(async (req, res, next) => {
   const text = req.body.text;
-  if (!text) {
+  const userID = req.locals.users.id;
+  if (!text || !userID) {
     return next(new AppError(400, "Invalid request body!"));
   }
   const completion = await ai.chat.completions.create({
@@ -18,10 +19,25 @@ module.exports.sendChatReq = catchAsync(async (req, res, next) => {
     return next(new AppError(400, "Something went wromg."));
   }
 
-  res.status(200).json({
-    status: 200,
+  const saveResponse = await Chat.create({
+    message: text,
     response: completion,
+    senderId: userID,
   });
+
+  if (saveResponse) {
+    res.status(200).json({
+      status: 200,
+      response: completion,
+      message: "Data Saved.",
+    });
+  } else {
+    res.status(200).json({
+      status: 200,
+      response: completion,
+      message: "Data Not Saved.",
+    });
+  }
 });
 module.exports.saveChatRes = (req, res, next) => {};
 
@@ -43,12 +59,12 @@ module.exports.fetchChats = catchAsync(async (req, res, next) => {
       senderId: user.id,
     },
   });
-  const duplicatedChats = [...Array(10)].flatMap(() => chats);
+  // const duplicatedChats = [...Array(10)].flatMap(() => chats);
   res.status(201).json({
     status: 201,
     message: "Chats fetched.",
     payload: {
-      data: duplicatedChats,
+      data: chats,
     },
   });
 });
