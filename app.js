@@ -38,7 +38,6 @@ app.get("/", (req, res, next) => {
   return res.status(200).json({
     status: "Succeess",
     message: "Applicatin Running...",
-    db: process.env.DB_NAME,
   });
 });
 app.all("*", (req, res, next) => {
