@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "build": "esbuild entry.js --bundle --platform=node --outfile=dist/bundle.js"
   },
   "author": "Vaibhav",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "sequelize": "^6.35.2"
   },
   "devDependencies": {
+    "esbuild": "^0.19.12",
     "morgan": "^1.10.0"
   }
 }
