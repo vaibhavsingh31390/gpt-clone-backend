@@ -18,8 +18,8 @@ module.exports.sendChatReq = catchAsync(async (req, res, next) => {
     return next(new AppError(400, "Something went wromg."));
   }
 
-  res.status(201).json({
-    status: 201,
+  res.status(200).json({
+    status: 200,
     response: completion,
   });
 });
