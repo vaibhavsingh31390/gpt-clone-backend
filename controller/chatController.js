@@ -61,6 +61,7 @@ module.exports.fetchChats = catchAsync(async (req, res, next) => {
       senderId: user.id,
     },
     group: ["message"],
+    order: [["createdAt", "DESC"]],
   });
   res.status(201).json({
     status: 201,
@@ -96,5 +97,39 @@ module.exports.fetchSingleChat = catchAsync(async (req, res, next) => {
     payload: {
       data: chats,
     },
+  });
+});
+
+module.exports.deleteSingleChat = catchAsync(async (req, res, next) => {
+  const email = req.locals.users.email || req.body.email;
+  const id = req.params.id || req.body.id;
+  if (!email || !id) {
+    return next(
+      new AppError(400, "Please provide a valid sender and chat ID.")
+    );
+  }
+
+  const user = await User.findOne({
+    where: {
+      email: email,
+    },
+  });
+  if (!user) {
+    return next(new AppError(400, "User not found."));
+  }
+  const chatToDelete = await Chat.findOne({
+    where: {
+      senderId: user.id,
+      conversationId: id,
+    },
+  });
+
+  if (!chatToDelete) {
+    return next(new AppError(400, "Chat not found."));
+  }
+  await chatToDelete.destroy();
+  res.status(204).json({
+    status: 204,
+    message: "Chat deleted successfully.",
   });
 });
