@@ -59,7 +59,6 @@ module.exports.fetchChats = catchAsync(async (req, res, next) => {
       senderId: user.id,
     },
   });
-  // const duplicatedChats = [...Array(10)].flatMap(() => chats);
   res.status(201).json({
     status: 201,
     message: "Chats fetched.",
