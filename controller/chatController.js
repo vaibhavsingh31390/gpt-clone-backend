@@ -29,12 +29,14 @@ module.exports.sendChatReq = catchAsync(async (req, res, next) => {
     res.status(200).json({
       status: 200,
       response: completion,
+      messageID: saveResponse.conversationId,
       message: "Data Saved.",
     });
   } else {
     res.status(200).json({
       status: 200,
       response: completion,
+      messageID: saveResponse.conversationId,
       message: "Data Not Saved.",
     });
   }
@@ -58,6 +60,7 @@ module.exports.fetchChats = catchAsync(async (req, res, next) => {
     where: {
       senderId: user.id,
     },
+    group: ["message"],
   });
   res.status(201).json({
     status: 201,
