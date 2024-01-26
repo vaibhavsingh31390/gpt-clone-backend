@@ -51,12 +51,12 @@ const User = sequelize.define(
   }
 );
 
-// User.sync({ force: false })
-//   .then(() => {
-//     console.log("User table created");
-//   })
-//   .catch((err) => {
-//     console.error("Error creating User table:", err);
-//   });
+User.sync({ force: false })
+  .then(() => {
+    console.log("User table created");
+  })
+  .catch((err) => {
+    console.error("Error creating User table:", err);
+  });
 
 module.exports = User;
