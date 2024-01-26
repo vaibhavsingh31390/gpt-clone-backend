@@ -2,8 +2,27 @@ const Chat = require("../models/chatModel");
 const User = require("../models/userModel");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/CatchAsync");
+const openAi = require("openai");
+const ai = new openAi.OpenAI();
+module.exports.sendChatReq = catchAsync(async (req, res, next) => {
+  const text = req.body.text;
+  if (!text) {
+    return next(new AppError(400, "Invalid request body!"));
+  }
+  const completion = await ai.chat.completions.create({
+    messages: [{ role: "user", content: text }],
+    model: "gpt-3.5-turbo",
+  });
 
-module.exports.sendChatReq = (req, res, next) => {};
+  if (!completion) {
+    return next(new AppError(400, "Something went wromg."));
+  }
+
+  res.status(201).json({
+    status: 201,
+    response: completion,
+  });
+});
 module.exports.saveChatRes = (req, res, next) => {};
 
 module.exports.fetchChats = catchAsync(async (req, res, next) => {
