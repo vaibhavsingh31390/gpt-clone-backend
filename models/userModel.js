@@ -31,6 +31,11 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    credits: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 5,
+    },
   },
   {
     timestamps: true,

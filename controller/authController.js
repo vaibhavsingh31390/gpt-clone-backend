@@ -35,6 +35,8 @@ module.exports.createUser = catchAsync(async (req, res, next) => {
   res.cookie("jwt", userToken, {
     httpOnly: true,
     maxAge: 86400 * process.env.TOKEN_VALIDITY_DAYS,
+    sameSite: "None",
+    secure: true,
   });
   res.status(200).json({
     status: 200,
@@ -68,6 +70,8 @@ module.exports.signInUser = catchAsync(async (req, res, next) => {
   res.cookie("jwt", userToken, {
     httpOnly: true,
     maxAge: 86400 * process.env.TOKEN_VALIDITY_DAYS,
+    sameSite: "None",
+    secure: true,
   });
   res.status(200).json({
     status: 200,

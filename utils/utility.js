@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const catchAsync = require("./CatchAsync");
+const openAi = require("openai");
+const ai = new openAi.OpenAI();
+
 const createJWT = (user) => {
   const expirySeconds = process.env.TOKEN_EXPIRY;
   const jwtToken = jwt.sign(
@@ -31,15 +33,49 @@ const checkUserJwtHeader = (req) => {
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
-    console.log("BEARER");
-
     return req.headers.authorization.split(" ")[1];
   }
   if (req.cookies.jwt) {
-    console.log("COOKIE");
     return req.cookies.jwt;
   }
   return null;
 };
 
-module.exports = { createJWT, verifyJWT, verifyPassword, checkUserJwtHeader };
+const checkUserCredits = async (userID, Model) => {
+  const user = await Model.findOne({
+    where: { id: userID },
+  });
+  if (user.credits === 0) {
+    return { status: false, message: "Not enough credits." };
+  }
+  return { status: true, user };
+};
+
+const getChatCompletion = async (text) => {
+  try {
+    return await ai.chat.completions.create({
+      messages: [{ role: "user", content: text }],
+      model: "gpt-3.5-turbo",
+    });
+  } catch (error) {
+    return { status: false, message: error };
+  }
+};
+
+const updateCredits = async (Model, credits, userID) => {
+  const userCredits = await Model.update(
+    { credits: credits - 1 },
+    { where: { id: userID } }
+  );
+  return userCredits;
+};
+
+module.exports = {
+  createJWT,
+  verifyJWT,
+  verifyPassword,
+  checkUserJwtHeader,
+  checkUserCredits,
+  getChatCompletion,
+  updateCredits,
+};

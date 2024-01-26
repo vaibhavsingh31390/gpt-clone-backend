@@ -3,48 +3,54 @@ const User = require("../models/userModel");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/CatchAsync");
 const Sequelize = require("sequelize");
-const openAi = require("openai");
-const ai = new openAi.OpenAI();
+const {
+  checkUserCredits,
+  getChatCompletion,
+  updateCredits,
+} = require("../utils/utility");
+
+const saveChatRes = async (message, response, senderId, group_id) => {
+  const saveResponse = await Chat.create({
+    message,
+    response,
+    senderId,
+    group_id,
+  });
+
+  if (!saveResponse) {
+    throw new AppError(400, "Something went wrong.");
+  } else {
+    console.log("Record Saved");
+  }
+};
+
 module.exports.sendChatReq = catchAsync(async (req, res, next) => {
   const text = req.body.text;
-  const userID = req.locals.users.id;
+  const userID = req.body.id || req.locals.users.id;
   const groupId = req.body.groupId;
   if (!text || !userID) {
     return next(new AppError(400, "Invalid request body!"));
   }
-  const completion = await ai.chat.completions.create({
-    messages: [{ role: "user", content: text }],
-    model: "gpt-3.5-turbo",
-  });
-
+  const user = await checkUserCredits(userID, User);
+  if (!user.status) {
+    return next(new AppError(400, user.message));
+  }
+  const userCredits = await updateCredits(User, user.user.credits, userID);
+  if (!userCredits) {
+    return next(new AppError(500, "Something went wrong."));
+  }
+  const completion = await getChatCompletion(text);
   if (!completion) {
-    return next(new AppError(400, "Something went wromg."));
+    return next(new AppError(400, "Something went wrong."));
   }
 
-  const saveResponse = await Chat.create({
-    message: text,
+  res.status(200).json({
+    status: 200,
     response: completion,
-    senderId: userID,
-    group_id: groupId,
+    message: "Data Saved.",
   });
-
-  if (saveResponse) {
-    res.status(200).json({
-      status: 200,
-      response: completion,
-      messageID: saveResponse.conversationId,
-      message: "Data Saved.",
-    });
-  } else {
-    res.status(200).json({
-      status: 200,
-      response: completion,
-      messageID: saveResponse.conversationId,
-      message: "Data Not Saved.",
-    });
-  }
+  saveChatRes(text, completion, userID, groupId);
 });
-module.exports.saveChatRes = (req, res, next) => {};
 
 module.exports.fetchChats = catchAsync(async (req, res, next) => {
   const email = req.locals.users.email || req.body.email;
