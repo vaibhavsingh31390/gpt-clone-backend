@@ -22,6 +22,10 @@ const Chat = sequelize.define(
       type: DataTypes.JSON,
       allowNull: false,
     },
+    group_id: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+    },
   },
   {
     timestamps: true,

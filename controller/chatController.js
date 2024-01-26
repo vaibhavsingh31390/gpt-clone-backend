@@ -2,11 +2,13 @@ const Chat = require("../models/chatModel");
 const User = require("../models/userModel");
 const AppError = require("../utils/AppError");
 const catchAsync = require("../utils/CatchAsync");
+const Sequelize = require("sequelize");
 const openAi = require("openai");
 const ai = new openAi.OpenAI();
 module.exports.sendChatReq = catchAsync(async (req, res, next) => {
   const text = req.body.text;
   const userID = req.locals.users.id;
+  const groupId = req.body.groupId;
   if (!text || !userID) {
     return next(new AppError(400, "Invalid request body!"));
   }
@@ -23,6 +25,7 @@ module.exports.sendChatReq = catchAsync(async (req, res, next) => {
     message: text,
     response: completion,
     senderId: userID,
+    group_id: groupId,
   });
 
   if (saveResponse) {
@@ -57,15 +60,21 @@ module.exports.fetchChats = catchAsync(async (req, res, next) => {
     return next(new AppError(400, "Data not found."));
   }
   const chats = await Chat.findAll({
+    attributes: [
+      "group_id",
+      "message",
+      [Sequelize.fn("max", Sequelize.col("createdAt")), "latestCreatedAt"],
+    ],
     where: {
       senderId: user.id,
     },
-    group: ["message"],
-    order: [["createdAt", "DESC"]],
+    group: ["group_id"],
+    order: [[Sequelize.literal("latestCreatedAt"), "DESC"]],
   });
+
   res.status(201).json({
     status: 201,
-    message: "Chats fetched.",
+    message: chats.length > 0 ? "Chats fetched." : "No Content",
     payload: {
       data: chats,
     },
@@ -88,12 +97,12 @@ module.exports.fetchSingleChat = catchAsync(async (req, res, next) => {
   const chats = await Chat.findAll({
     where: {
       senderId: user.id,
-      conversationId: id,
+      group_id: id,
     },
   });
   res.status(201).json({
     status: 201,
-    message: "Chats fetched.",
+    message: chats.length > 0 ? "Chats fetched." : "No Content",
     payload: {
       data: chats,
     },
@@ -120,7 +129,7 @@ module.exports.deleteSingleChat = catchAsync(async (req, res, next) => {
   const chatToDelete = await Chat.findOne({
     where: {
       senderId: user.id,
-      conversationId: id,
+      group_id: id,
     },
   });
 
