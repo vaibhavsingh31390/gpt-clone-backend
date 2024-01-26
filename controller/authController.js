@@ -65,12 +65,9 @@ module.exports.signInUser = catchAsync(async (req, res, next) => {
     return next(new AppError(403, "Inavlid credentials."));
   }
   const userToken = createJWT(user);
-  const expiry = 86400 * 1000 * process.env.TOKEN_VALIDITY_DAYS;
   res.cookie("jwt", userToken, {
     httpOnly: true,
-    maxAge: new Date(Date.now() + expiry),
-    sameSite: "None",
-    secure: true,
+    maxAge: 86400 * process.env.TOKEN_VALIDITY_DAYS,
   });
   res.status(200).json({
     status: 200,
@@ -87,7 +84,7 @@ module.exports.signOutUser = catchAsync(async (req, res, next) => {
   if (!jwtCookie) {
     return next(new AppError(403, "Inavlid requet."));
   }
-  res.cookie("jwt", "", { expires: new Date(0) });
+  res.cookie("jwt", "", { expires: new Date(1), httpOnly: true });
   res.status(200).json({
     status: 200,
     message: "Logged out Successfully",

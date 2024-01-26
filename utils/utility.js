@@ -27,14 +27,17 @@ const verifyPassword = async (user, password) => {
 };
 
 const checkUserJwtHeader = (req) => {
-  if (req.cookies.jwt) {
-    return req.cookies.jwt;
-  }
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
+    console.log("BEARER");
+
     return req.headers.authorization.split(" ")[1];
+  }
+  if (req.cookies.jwt) {
+    console.log("COOKIE");
+    return req.cookies.jwt;
   }
   return null;
 };
