@@ -6,7 +6,7 @@ const Sequelize = require("sequelize");
 const {
   checkUserCredits,
   getChatCompletion,
-  updateCredits,
+  updateCreditsReduce,
 } = require("../utils/utility");
 
 const saveChatRes = async (message, response, senderId, group_id) => {
@@ -35,7 +35,11 @@ module.exports.sendChatReq = catchAsync(async (req, res, next) => {
   if (!user.status) {
     return next(new AppError(400, user.message));
   }
-  const userCredits = await updateCredits(User, user.user.credits, userID);
+  const userCredits = await updateCreditsReduce(
+    User,
+    user.user.credits,
+    userID
+  );
   if (!userCredits) {
     return next(new AppError(500, "Something went wrong."));
   }

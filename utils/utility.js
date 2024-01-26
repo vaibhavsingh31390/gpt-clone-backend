@@ -62,11 +62,23 @@ const getChatCompletion = async (text) => {
   }
 };
 
-const updateCredits = async (Model, credits, userID) => {
+const updateCreditsReduce = async (Model, credits, userID) => {
   const userCredits = await Model.update(
     { credits: credits - 1 },
     { where: { id: userID } }
   );
+  return userCredits;
+};
+
+const updateCreditsBy = async (Model, credits, userID, newcredits) => {
+  const userCredits = await Model.update(
+    { credits: parseInt(credits) + parseInt(newcredits), creditsToken: null },
+    { where: { id: userID } }
+  );
+
+  if (!userCredits) {
+    return false;
+  }
   return userCredits;
 };
 
@@ -77,5 +89,6 @@ module.exports = {
   checkUserJwtHeader,
   checkUserCredits,
   getChatCompletion,
-  updateCredits,
+  updateCreditsReduce,
+  updateCreditsBy,
 };

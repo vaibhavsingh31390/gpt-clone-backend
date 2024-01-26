@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const cors = require("cors");
+const path = require("path");
 const errorHandler = require("./controller/errorController");
 const AppError = require("./utils/AppError");
 const cookieParser = require("cookie-parser");
@@ -9,6 +10,11 @@ require("dotenv").config({ path: "./config.env" });
 if (process.env.APP_ENV === "DEV") {
   app.use(morgan("dev"));
 }
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "Views/EmailTemplates"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 const allowedOrigins = [
   "https://chatgpt-cloned.netlify.app",
@@ -32,8 +38,10 @@ app.use(cookieParser());
 
 const authRoutes = require("./routes/authRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const pmtRoutes = require("./routes/paymentRoutes");
 app.use("/api/v1/users", authRoutes);
 app.use("/api/v1/chats", chatRoutes);
+app.use("/api/v1/payment", pmtRoutes);
 app.get("/", (req, res, next) => {
   return res.status(200).json({
     status: "Succeess",

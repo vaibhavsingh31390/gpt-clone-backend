@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= data.subject %>
+  </title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h2 {
+      color: #007bff;
+      /* Blue color for the heading */
+    }
+
+    p {
+      margin-bottom: 10px;
+    }
+
+    strong {
+      color: #333;
+      /* Dark gray color for strong tags */
+    }
+
+    button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    button a {
+      text-decoration: none;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Free Credit Request</h2>
+  <p><strong>Name:</strong>
+    <%= data.name %>
+  </p>
+  <p><strong>Email:</strong>
+    <%= data.email %>
+  </p>
+  <p><strong>Credits:</strong>
+    <%= data.credits %>
+  </p>
+  <p><strong>Message:</strong>
+    <%= data.message %>
+  </p>
+
+  <button>
+    <a href="<%= data.accept %>">Accept</a>
+  </button>
+  <button>
+    <a href="<%= data.decline %>">Decline</a>
+  </button>
+</body>
+
+</html>
