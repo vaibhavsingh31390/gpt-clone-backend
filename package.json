@@ -2,10 +2,11 @@
   "name": "gpt-clone-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "build": "esbuild server.js --bundle --platform=node --outfile=dist/bundle.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "build": "esbuild app.js --bundle --platform=node --outfile=dist/bundle.js"
   },
   "author": "Vaibhav",
   "license": "ISC",

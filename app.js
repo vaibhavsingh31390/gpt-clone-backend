@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+require("dotenv").config({ path: "./config.env" });
+const sequelize = require("./dbConfig.js");
 const cors = require("cors");
 const path = require("path");
 const errorHandler = require("./controller/errorController");
@@ -56,4 +58,22 @@ app.all("*", (req, res, next) => {
 });
 app.use(errorHandler);
 
-module.exports = app;
+const port = process.env.PORT;
+
+async function startApp() {
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+
+    app.listen(port, () => {
+      console.log(`App running on ${port} in ${process.env.APP_ENV} mode.`);
+    });
+  } catch (error) {
+    console.error(
+      `Unable to connect to the database:   [${process.env.DB_NAME}, ${process.env.DB_USERNAME}, ${process.env.DB_PASS}], ${process.env.DB_HOST}`,
+      error
+    );
+  }
+}
+
+startApp();
