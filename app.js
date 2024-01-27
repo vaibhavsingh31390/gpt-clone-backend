@@ -10,14 +10,6 @@ const AppError = require("./utils/AppError");
 const cookieParser = require("cookie-parser");
 require("dotenv").config({ path: "./config.env" });
 
-app.use((req, res, next) => {
-  if (req.secure) {
-    next();
-  } else {
-    res.redirect("https://" + req.headers.host + req.url);
-  }
-});
-
 if (process.env.APP_ENV === "DEV") {
   app.use(morgan("dev"));
 }
