@@ -1,5 +1,6 @@
 const express = require("express");
-const app = express();
+const https = require("https");
+const fs = require("fs");
 const morgan = require("morgan");
 require("dotenv").config({ path: "./config.env" });
 const sequelize = require("./dbConfig.js");
@@ -10,9 +11,16 @@ const AppError = require("./utils/AppError");
 const cookieParser = require("cookie-parser");
 require("dotenv").config({ path: "./config.env" });
 
+const privateKey = fs.readFileSync("private-key.pem", "utf8");
+const certificate = fs.readFileSync("certificate.pem", "utf8");
+
+const credentials = { key: privateKey, cert: certificate };
+
 if (process.env.APP_ENV === "DEV") {
   app.use(morgan("dev"));
 }
+
+const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "Views/EmailTemplates"));
@@ -47,8 +55,8 @@ app.use("/api/v1/chats", chatRoutes);
 app.use("/api/v1/payment", pmtRoutes);
 app.get("/", (req, res, next) => {
   return res.status(200).json({
-    status: "Succeess",
-    message: "Applicatin Running...",
+    status: "Success",
+    message: "Application Running...",
   });
 });
 app.all("*", (req, res, next) => {
@@ -66,7 +74,9 @@ async function startApp() {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
 
-    app.listen(port, () => {
+    const httpsServer = https.createServer(credentials, app);
+
+    httpsServer.listen(port, () => {
       console.log(`App running on ${port} in ${process.env.APP_ENV} mode.`);
     });
   } catch (error) {
