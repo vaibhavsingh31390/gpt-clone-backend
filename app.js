@@ -70,7 +70,7 @@ const port = process.env.PORT;
 
 async function startApp() {
   try {
-    // await sequelize.authenticate();
+    await sequelize.authenticate();
     console.log("Connection has been established successfully.");
 
     const httpsServer = https.createServer(credentials, app);
