@@ -11,7 +11,7 @@ async function startApp() {
 
     app.listen(port, () => {
       console.log(
-        `App running on ${host}:${port} in ${process.env.APP_ENV} mode.`
+        `App running on ${port} in ${process.env.APP_ENV} mode.`
       );
     });
   } catch (error) {
