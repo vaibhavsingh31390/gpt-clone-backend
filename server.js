@@ -16,7 +16,7 @@ async function startApp() {
     });
   } catch (error) {
     console.error(
-      `Unable to connect to the database:   [${process.env.DB_NAME}, ${process.env.DB_USERNAME}, ${process.env.DB_PASS}], ${process.env.DB_HOST}`,
+      `Unable to connect to the database:  [${process.env.DB_NAME}, ${process.env.DB_USERNAME}, ${process.env.DB_PASS}], ${process.env.DB_HOST}`,
       error
     );
   }
