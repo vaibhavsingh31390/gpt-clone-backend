@@ -35,14 +35,16 @@ module.exports.freeCreditsRequest = catchAsync(async (req, res, next) => {
 
   findUser.accept = `https://${host}/api/v1/payment/free-credit-request/accept/${randomToken}`;
   findUser.decline = `https://${host}/api/v1/payment/free-credit-request/decline/${randomToken}`;
-  const data = await new Email().sendMessage(
+
+  res
+    .status(201)
+    .json({ status: 201, message: "success", url: findUser.accept });
+
+  await new Email().sendMessage(
     findUser,
     "Template",
     "CHAT GPT | FREE CREDIT REQ"
   );
-  if (data) {
-    res.status(201).json({ status: 201, message: "success" });
-  }
 });
 
 module.exports.freeCreditsRequestAccept = catchAsync(async (req, res, next) => {
