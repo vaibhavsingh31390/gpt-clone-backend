@@ -15,12 +15,11 @@ const privateKey = fs.readFileSync("private-key.pem", "utf8");
 const certificate = fs.readFileSync("certificate.pem", "utf8");
 
 const credentials = { key: privateKey, cert: certificate };
+const app = express();
 
 if (process.env.APP_ENV === "DEV") {
   app.use(morgan("dev"));
 }
-
-const app = express();
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "Views/EmailTemplates"));
