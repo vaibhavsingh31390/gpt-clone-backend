@@ -1,7 +1,7 @@
 require("dotenv").config({ path: "./config.env" });
 const app = require("./app");
 const port = process.env.APP_PORT;
-const host = process.env.APP_HOST || "127.0.0.1";
+const host = process.env.APP_HOST;
 const sequelize = require("./dbConfig.js");
 
 async function startApp() {
@@ -9,7 +9,7 @@ async function startApp() {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
 
-    app.listen(port, "65.109.122.227", () => {
+    app.listen(port, () => {
       console.log(
         `App running on ${host}:${port} in ${process.env.APP_ENV} mode.`
       );
