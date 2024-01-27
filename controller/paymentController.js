@@ -33,8 +33,8 @@ module.exports.freeCreditsRequest = catchAsync(async (req, res, next) => {
   findUser.message = "Request for some free credits.";
   const host = req.get("Host");
 
-  findUser.accept = `http://${host}/api/v1/payment/free-credit-request/accept/${randomToken}`;
-  findUser.decline = `http://${host}/api/v1/payment/free-credit-request/decline/${randomToken}`;
+  findUser.accept = `https://${host}/api/v1/payment/free-credit-request/accept/${randomToken}`;
+  findUser.decline = `https://${host}/api/v1/payment/free-credit-request/decline/${randomToken}`;
   const data = await new Email().sendMessage(
     findUser,
     "Template",
