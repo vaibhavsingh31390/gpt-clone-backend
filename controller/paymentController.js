@@ -36,9 +36,7 @@ module.exports.freeCreditsRequest = catchAsync(async (req, res, next) => {
   findUser.accept = `https://${host}/api/v1/payment/free-credit-request/accept/${randomToken}`;
   findUser.decline = `https://${host}/api/v1/payment/free-credit-request/decline/${randomToken}`;
 
-  res
-    .status(201)
-    .json({ status: 201, message: "success", url: findUser.accept });
+  res.status(201).json({ status: 201, message: "success" });
 
   await new Email().sendMessage(
     findUser,
