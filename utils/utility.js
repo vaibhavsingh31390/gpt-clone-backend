@@ -46,7 +46,10 @@ const checkUserCredits = async (userID, Model) => {
     where: { id: userID },
   });
   if (user.credits === 0) {
-    return { status: false, message: "Not enough credits." };
+    return {
+      status: false,
+      message: "Not enough credits.\n Please request for free credits.",
+    };
   }
   return { status: true, user };
 };
