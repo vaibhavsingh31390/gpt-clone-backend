@@ -74,9 +74,8 @@ async function startApp() {
     console.log("Connection has been established successfully.");
 
     // const httpsServer = https.createServer(credentials, app);
-    const httpsServer = https.createServer(app);
 
-    httpsServer.listen(port, () => {
+    app.listen(port, () => {
       console.log(`App running on ${port} in ${process.env.APP_ENV} mode.`);
     });
   } catch (error) {
