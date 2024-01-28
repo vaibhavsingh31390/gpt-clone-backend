@@ -136,7 +136,7 @@ module.exports.deleteSingleChat = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new AppError(400, "User not found."));
   }
-  const chatToDelete = await Chat.findAll({
+  const chatToDelete = await Chat.destroy({
     where: {
       senderId: user.id,
       group_id: id,
@@ -146,10 +146,9 @@ module.exports.deleteSingleChat = catchAsync(async (req, res, next) => {
   if (!chatToDelete) {
     return next(new AppError(400, "Chat not found."));
   }
-  await chatToDelete.destroy();
+
   res.status(200).json({
     status: 200,
     message: "Chat deleted successfully.",
-    chatToDelete,
   });
 });
