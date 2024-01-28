@@ -29,6 +29,7 @@ app.use(express.urlencoded({ extended: false }));
 const allowedOrigins = [
   "https://chatgpt-cloned.netlify.app",
   "http://localhost:5173",
+  "http://43.205.231.49:5001",
 ];
 const corsOptions = {
   origin: function (origin, callback) {
