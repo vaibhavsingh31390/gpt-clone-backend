@@ -147,8 +147,9 @@ module.exports.deleteSingleChat = catchAsync(async (req, res, next) => {
     return next(new AppError(400, "Chat not found."));
   }
   await chatToDelete.destroy();
-  res.status(204).json({
-    status: 204,
+  res.status(200).json({
+    status: 200,
     message: "Chat deleted successfully.",
+    chatToDelete,
   });
 });
