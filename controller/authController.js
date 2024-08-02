@@ -42,7 +42,7 @@ module.exports.createUser = catchAsync(async (req, res, next) => {
     status: 200,
     message: "Success",
     payload: {
-      users: { name: user.name, email: user.email },
+      users: { id: user.id, name: user.name, email: user.email },
       token: userToken,
     },
   });
