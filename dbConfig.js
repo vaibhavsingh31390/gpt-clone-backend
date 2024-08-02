@@ -1,10 +1,11 @@
+require("dotenv").config({ path: "./../config.env" });
 const { Sequelize } = require("sequelize");
 const mariadb = require("mariadb");
 
 let name = "gpt_clone_db";
 let username = "root";
 let userpass = null;
-let host = "localhost";
+let host = "127.0.0.1";
 
 if (process.env.APP_ENV !== "DEV") {
   name = process.env.DB_NAME;
