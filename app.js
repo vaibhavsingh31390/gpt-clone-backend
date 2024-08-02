@@ -30,6 +30,7 @@ const allowedOrigins = [
   "https://chatgpt-cloned.netlify.app",
   "http://localhost:5173",
   "http://43.205.231.49:5001",
+  "http://65.1.132.5:8004",
 ];
 const corsOptions = {
   origin: function (origin, callback) {
@@ -71,7 +72,7 @@ const port = process.env.PORT;
 
 async function startApp() {
   try {
-    await sequelize.authenticate();
+    // await sequelize.authenticate();
     console.log("Connection has been established successfully.");
 
     // const httpsServer = https.createServer(credentials, app);

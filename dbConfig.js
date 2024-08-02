@@ -1,7 +1,7 @@
 const { Sequelize } = require("sequelize");
 const mariadb = require("mariadb");
 
-let name = "gptclone";
+let name = "gpt_clone_db";
 let username = "root";
 let userpass = null;
 let host = "localhost";
