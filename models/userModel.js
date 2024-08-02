@@ -1,5 +1,6 @@
 // Define the User model
 require("dotenv").config({ path: "./../config.env" });
+
 const { DataTypes } = require("sequelize");
 const bcrypt = require("bcryptjs");
 const sequelize = require("../dbConfig");
